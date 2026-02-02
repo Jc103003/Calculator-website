@@ -1,34 +1,41 @@
 // VARIABLES
 
-let numberOne = 0
-let numbertwo = 0
-let operator = ""
+// Calc variables
+let numberOne = ''
+let numberTwo = ''
+let operator = null
+let typingSecondNum = false
+let mathComplete = false
+
+// Buttons
+const container = document.getElementById('buttonContainer')
+const display = document.querySelector('.display')
 
 
 // FUNCTIONS
 
 // Basic calculator functions
 function add(a, b) {
-    return a + b
+    return Number(a) + Number(b);
 }
 
 function subtract(a, b) {
-    return a - b
+    return Number(a) - Number(b);
 }
 
 function multiply(a, b) {
-    return a * b
+    return Number(a) * Number(b);
 }
 
-function divide(a, b){
-    return a / b
+function divide(a, b) {
+    return Number(a) / Number(b);
 }
 
 // Take operator and numbers then call one of the basic functions
 function operate(a, b, operator) {
     switch(operator) {
         case "+":
-            return add(a, b)
+            return (add(a, b))
         case "-":
             return subtract(a, b)
         case "*":
@@ -39,4 +46,74 @@ function operate(a, b, operator) {
             console.log("ERROR, NO OPERATOR FOUND")
     }
 }
+
+// Update variables / display based off of button clicked
+function handleNumberClicked(num) {
+  if (!typingSecondNum) {
+    numberOne += num;
+    display.textContent = numberOne;
+  } else {
+    numberTwo += num;
+    display.textContent = numberOne + operator + numberTwo;
+  }
+}
+
+function handleClearClicked() {
+    numberOne = '';
+    numberTwo = '';
+    operator = null;
+    typingSecondNum = false;
+    mathComplete = false;
+    display.textContent = '';
+}
+
+// Event listners
+// All buttons
+container.addEventListener('click', function(event) {
+    // Num buttons
+    if (event.target.classList.contains('number')) {
+        if (mathComplete) {
+            console.log("new number time")
+            handleClearClicked()
+        }
+        handleNumberClicked(event.target.textContent)
+    }
+    // Operator buttons (can assume if not num then operator)
+    else if (event.target.classList.contains('operator')) {
+        const buttontext = event.target.textContent
+        switch (buttontext) {
+            case "=":
+                if ( numberOne === '0' && numberTwo === '0' && operator === "/") {
+                    display.textContent = "WHY WOULD YOU DO THAT"
+                    mathComplete = true
+                    break
+                }
+
+                console.log(operate(numberOne, numberTwo, operator))
+                mathComplete = true
+                display.textContent = operate(numberOne, numberTwo, operator)
+                break
+
+            case "Clear":
+                handleClearClicked()
+                break
+
+            default:
+                if (operator != null) {
+                    ans = operate(numberOne, numberTwo, operator)
+                    console.log(ans)
+                    numberOne = ans
+                    numberTwo = ''
+
+                }
+                typingSecondNum = true
+                operator = event.target.textContent
+                display.textContent = numberOne + operator + numberTwo;
+                
+                
+        }
+    }
+
+})
+
 
