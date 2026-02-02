@@ -6,6 +6,7 @@ let numberTwo = ''
 let operator = null
 let typingSecondNum = false
 let mathComplete = false
+let hasDot = false
 
 // Buttons
 const container = document.getElementById('buttonContainer')
@@ -49,19 +50,24 @@ function operate(a, b, operator) {
 
 // Update variables / display based off of button clicked
 function handleNumberClicked(num) {
-  if (!typingSecondNum) {
-    numberOne += num;
-    display.textContent = numberOne;
-  } else {
-    numberTwo += num;
-    display.textContent = numberOne + operator + numberTwo;
-  }
+    if (num == '.'){
+        hasDot = true
+    }
+
+    if (!typingSecondNum) {
+        numberOne += num;
+        display.textContent = numberOne;
+    } else {
+        numberTwo += num;
+        display.textContent = numberOne + operator + numberTwo;
+    }
 }
 
 function handleClearClicked() {
     numberOne = '';
     numberTwo = '';
     operator = null;
+    hasDot = false;
     typingSecondNum = false;
     mathComplete = false;
     display.textContent = '';
@@ -73,9 +79,13 @@ container.addEventListener('click', function(event) {
     // Num buttons
     if (event.target.classList.contains('number')) {
         if (mathComplete) {
-            console.log("new number time")
             handleClearClicked()
         }
+
+        if (hasDot && event.target.textContent == ".") {
+            return
+        }
+        
         handleNumberClicked(event.target.textContent)
     }
     // Operator buttons (can assume if not num then operator)
@@ -107,10 +117,11 @@ container.addEventListener('click', function(event) {
 
                 }
                 typingSecondNum = true
+                hasDot = false
                 operator = event.target.textContent
                 display.textContent = numberOne + operator + numberTwo;
                 
-                
+
         }
     }
 
