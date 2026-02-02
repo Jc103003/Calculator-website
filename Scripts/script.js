@@ -73,6 +73,35 @@ function handleClearClicked() {
     display.textContent = '';
 }
 
+function handleBackspace() {
+    if (typingSecondNum) {
+        if (numberTwo.slice = '.') {
+            hasDot = false
+        }
+
+        numberTwo = numberTwo.slice(0, -1)
+        display.textContent = numberOne + operator + numberTwo;
+        
+        if (numberTwo === '') {
+            typingSecondNum = false
+        }
+    }
+    else if (operator != null) {
+        operator = null
+        display.textContent = numberOne
+    }
+    
+    else {
+        if (numberOne.slice = '.') {
+            hasDot = false
+        }
+
+        numberOne = numberOne.slice(0, -1)
+        display.textContent = numberOne;
+    }
+    
+}
+
 // Event listners
 // All buttons
 container.addEventListener('click', function(event) {
@@ -108,6 +137,10 @@ container.addEventListener('click', function(event) {
                 handleClearClicked()
                 break
 
+            case "Back":
+                handleBackspace()
+                break
+
             default:
                 if (operator != null) {
                     ans = operate(numberOne, numberTwo, operator)
@@ -126,5 +159,7 @@ container.addEventListener('click', function(event) {
     }
 
 })
+
+display.
 
 
