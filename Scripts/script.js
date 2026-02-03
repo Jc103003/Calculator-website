@@ -102,6 +102,58 @@ function handleBackspace() {
     
 }
 
+function handleKeyPress(event) {
+    const keyPressed = event.key
+
+    switch (true) {
+        case keyPressed === 'Backspace':
+            event.preventDefault()
+            handleBackspace()
+            break
+
+        case keyPressed === 'Enter' || keyPressed === '=':
+            event.preventDefault()
+            if (numberOne === '0' && numberTwo === '0' && operator === '/') {
+                display.textContent = "WHY WOULD YOU DO THAT"
+                mathComplete = true
+                break
+            }
+            mathComplete = true
+            display.textContent = operate(numberOne, numberTwo, operator)
+            break
+
+        case keyPressed === 'Escape':
+            event.preventDefault()
+            handleClearClicked()
+            break
+
+        case !isNaN(keyPressed):
+            event.preventDefault()
+            if (mathComplete) handleClearClicked()
+            handleNumberClicked(keyPressed)
+            break
+
+        case keyPressed === '.':
+            event.preventDefault()
+            if (hasDot) break
+            handleNumberClicked('.')
+            break
+
+        case ['+', '-', '*', '/'].includes(keyPressed):
+            event.preventDefault()
+            if (operator != null) {
+                const ans = operate(numberOne, numberTwo, operator)
+                numberOne = ans
+                numberTwo = ''
+            }
+            typingSecondNum = true
+            hasDot = false
+            operator = keyPressed
+            display.textContent = numberOne + operator + numberTwo
+            break
+    }
+}
+
 // Event listners
 // All buttons
 container.addEventListener('click', function(event) {
@@ -153,13 +205,11 @@ container.addEventListener('click', function(event) {
                 hasDot = false
                 operator = event.target.textContent
                 display.textContent = numberOne + operator + numberTwo;
-                
-
         }
     }
 
 })
 
-display.
+document.addEventListener("keydown", handleKeyPress)
 
 
